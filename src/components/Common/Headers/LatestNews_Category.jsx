@@ -2,7 +2,6 @@ import React, { Component } from "react";
 
 class LastesNews_Category extends Component {
   render() {
-    console.log();
     return (
       <div className="col-3">
         {/* Item post */}

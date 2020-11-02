@@ -1868,3 +1868,12 @@ a.breadcrumb-item:hover {
 @media (max-width: 480px) {
   
 }
+
+
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown>.dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}

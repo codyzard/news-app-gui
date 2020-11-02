@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class Topbar_DestopHeader extends Component {
   render() {
@@ -46,9 +47,9 @@ class Topbar_DestopHeader extends Component {
         <div className="wrap-logo container">
           {/* Logo desktop */}
           <div className="logo">
-            <a href="index.html">
+            <Link to="/">
               <img src="images/icons/logo-01.png" alt="LOGO" />
-            </a>
+            </Link>
           </div>
           {/* Banner */}
           <div className="banner-header">

@@ -1,14 +1,29 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Category from "./Category";
 import Topbar_DesktopHeader from "./Topbar_DesktopHeader";
+import { connect } from "react-redux";
+import { getAllCategoriesRequest } from "./../../../actions/index";
 class DesktopHeader extends Component {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount() {
+    this.props.getAllCategories();
+  }
   render() {
+    var { categories } = this.props;
+    var mainCate = Object.keys(categories);
+    var subCate = Object.values(categories);
+    var categoryList = mainCate.map((c, index) => {
+      return <Category key={index} category={c} childCate={subCate[index]} />;
+    });
     return (
       <div>
         {/* Header desktop */}
         <div className="container-menu-desktop">
           {/* Topbar */}
-          <Topbar_DesktopHeader/>
+          <Topbar_DesktopHeader />
           {/*  */}
           <div className="wrap-main-nav">
             <div className="main-nav">
@@ -18,17 +33,10 @@ class DesktopHeader extends Component {
                   <img src="images/icons/logo-01.png" alt="LOGO" />
                 </a>
                 <ul className="main-menu">
-                  <li className="main-menu-active">
-                    <a href="index.html">Home</a>
-                    <ul className="sub-menu">
-                      <li>
-                        <a href="index.html">Homepage v1</a>
-                      </li>
-                    </ul>
+                  <li>
+                    <Link to="/">Home</Link>
                   </li>
-                  <Category/>
-                  <Category/>
-                  <Category/>
+                  {categoryList}
                   <li>
                     <a href="#">Features</a>
                     <ul className="sub-menu">
@@ -49,5 +57,16 @@ class DesktopHeader extends Component {
     );
   }
 }
-
-export default DesktopHeader;
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categories,
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    getAllCategories: () => {
+      dispatch(getAllCategoriesRequest());
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(DesktopHeader);
