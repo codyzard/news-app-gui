@@ -1,3 +1,4 @@
+import axios from 'axios';
 import * as types from './../../constants/ActionTypes';
 import callApi from './../../utils/apiCaller';
 
@@ -29,5 +30,33 @@ export const getCateNewNews = (change_cate_news) => {
     return {
         type: types.CHANGE_CATEGORIES_NEW_NEWS,
         change_cate_news,
+    }
+}
+let cancelToken;
+export const getMenuCateLatestNewsRequest = (category_name) =>{
+    return (dispatch) => {
+        return callApi('api/news/hover_change_header_cate_news', 'POST', {
+            category_name: category_name,
+        }).then(res => {    
+            if (res.data) return dispatch(getMenuCateLatestNews(res.data.header_cate_news))
+        })
+    }
+}
+export const getMenuCateLatestNews = (header_cate_news) =>{
+    return{
+        type: types.MENU_CATE_NEWS,
+        header_cate_news
+    }
+}
+export const cancelRequest = category_name => {
+    var cancelToken = axios.CancelToken.source()
+    return () => {
+        axios.post('api/news/hover_change_header_cate_news',{
+            category_name: category_name,
+        }, {
+            cancelToken: cancelToken.token
+        }).then(res => {    
+            console.log(res.data)
+        })
     }
 }

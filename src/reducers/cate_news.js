@@ -10,7 +10,6 @@ const cate_news = (state = initialState, action) => {
         case types.CHANGE_CATEGORIES_NEW_NEWS:
             var key = Object.keys(action.change_cate_news)[0];
             var value = Object.values(action.change_cate_news)[0];
-            console.log(value)
             switch(key){
                 case "Bóng đá":
                     state[0] = value;

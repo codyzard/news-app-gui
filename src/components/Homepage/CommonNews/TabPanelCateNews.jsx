@@ -20,7 +20,7 @@ class TabPanelCateNews extends Component {
         className={
           index === 0 ? "tab-pane fade show active" : "tab-pane fade show"
         }
-        id={"tab" + parent_cate.replaceAll(' ','') + index}
+        id={"tab" + parent_cate.name.replaceAll(' ','') + index}
         role="tabpanel"
       >
         <div className="row">

@@ -11,7 +11,7 @@ import CategoryPage from "./../CategoryPages/CategoryPage";
 import NewsDetail from "../NewsPages/NewsDetail";
 import { connect } from "react-redux";
 class Main extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
@@ -24,15 +24,9 @@ class Main extends Component {
         <Headline />
         {/* Homepage */}
         <Switch>
-          <Route path="/newsdetail">
-            <NewsDetail />
-          </Route>
-          <Route path="/category">
-            <CategoryPage />
-          </Route>
-          <Route path="/">
-            <Homepage />
-          </Route>
+          <Route path="/" exact component={Homepage}></Route>
+          <Route path="/news/:slug" component={NewsDetail}></Route>
+          <Route path="/categories/:slug" component={CategoryPage}></Route>
         </Switch>
         {/* Footer */}
         <Footer />
@@ -45,9 +39,9 @@ class Main extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return{
-    categories: state.categories
-  }
-}
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categories,
+  };
+};
 export default connect(mapStateToProps, null)(Main);

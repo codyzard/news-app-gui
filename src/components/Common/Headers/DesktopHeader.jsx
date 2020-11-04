@@ -8,15 +8,19 @@ class DesktopHeader extends Component {
   constructor(props) {
     super(props);
   }
-  componentDidMount() {
-    this.props.getAllCategories();
+  async componentDidMount() {
+    await this.props.getAllCategories();
   }
   render() {
     var { categories } = this.props;
-    var mainCate = Object.keys(categories);
-    var subCate = Object.values(categories);
-    var categoryList = mainCate.map((c, index) => {
-      return <Category key={index} category={c} childCate={subCate[index]} />;
+    var categoryList = categories.map((c, index) => {
+      return (
+        <Category
+          key={index}
+          category={c}
+          childCate={c.sub_cate}
+        />
+      );
     });
     return (
       <div>
@@ -29,12 +33,12 @@ class DesktopHeader extends Component {
             <div className="main-nav">
               {/* Menu desktop */}
               <nav className="menu-desktop">
-                <a className="logo-stick" href="index.html">
+                <Link className="logo-stick" to="/">
                   <img src="images/icons/logo-01.png" alt="LOGO" />
-                </a>
+                </Link>
                 <ul className="main-menu">
                   <li>
-                    <Link to="/">Home</Link>
+                    <Link to="/">{"Trang chủ"}</Link>
                   </li>
                   {categoryList}
                   <li>

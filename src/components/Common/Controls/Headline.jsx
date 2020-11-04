@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class Headline extends Component {
   render() {
     return (
-      <div className="container">
+      <div className="container" id="list_feature_news">
         <div className="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
           <div className="f2-s-1 p-r-30 size-w-0 m-tb-6 flex-wr-s-c">
             <span className="text-uppercase cl2 p-r-8">Trending Now:</span>

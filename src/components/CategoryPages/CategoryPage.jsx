@@ -2,165 +2,233 @@ import React, { Component } from "react";
 import FeatureNewsItem from "./FeatureNewsItem";
 import MostPopularNews from "./MostPopularNews";
 import NewsItem from "./NewsItem";
+import {
+  getCategoryWithNewsRequest,
+  getCategoryWithNewsNextPageRequest,
+  hotNewsInWeekRequest,
+} from "../../actions/index";
+import { connect } from "react-redux";
+import { isEmpty } from "lodash";
+import Pagination from "react-js-pagination";
+import { Link } from "react-router-dom";
+import { scrollOnTopList } from "./../../utils/helper_func";
+import { Puff } from "@agney/react-loading";
 class CategoryPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      category: null,
+      data: {},
+      loading: true,
+    };
+  }
+  async componentDidMount() {
+    var { category } = this.props.location.state;
+    if (isEmpty(this.props.category_show_news)) {
+      this.props.getCategoryWithNews(category.id);
+    }
+    if (isEmpty(this.props.hot_news_in_week)) {
+      this.props.hotNewsInWeek();
+    }
+    await new Promise((r) => setTimeout(r, 1000));
+    this.setState({
+      category: category,
+      data: this.props.category_show_news,
+      loading: false,
+    });
+  }
+  getNewsNextPage = async (category_id, pageNumber) => {
+    var { category } = this.props.location.state;
+    await this.props.getCategoryWithNewsNextPage(category_id, pageNumber);
+    this.setState({
+      category: category,
+      data: this.props.category_show_news,
+    });
+  };
   render() {
+    var category = this.props.location.state.category;
+    var { data, current_page, per_page, total } = this.props.category_show_news;
+    var { hot_news_in_week, feature_news_for_cate } = this.props;
+    var { loading } = this.state;
+    if (!isEmpty(data)) {
+      var list_news = data.map((news, index) => {
+        return <NewsItem key={index} news={news} />;
+      });
+    }
+    var list_feature_news = feature_news_for_cate.map((news, index) => {
+      return <FeatureNewsItem key={index} news={news} />;
+    });
     return (
-      <div>
-        {/* Breadcrumb*/}
-        <div className="container">
-          <div className="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
-            <div className="f2-s-1 p-r-30 m-tb-6">
-              <a href="index.html" className="breadcrumb-item f1-s-3 cl9">
-                Home
-              </a>
-              <span className="breadcrumb-item f1-s-3 cl9">Blog</span>
+      <>
+        {loading ? (
+          <Puff color="#00BFFF" height="150" width="100%" />
+        ) : (
+          <div>
+            {/* Page heading */}
+            <div className="container p-t-4 p-b-40">
+              <h2 className="f1-l-1 cl2 ml-1">{category.name}</h2>
             </div>
-          </div>
-        </div>
-        {/* Page heading */}
-        <div className="container p-t-4 p-b-40">
-          <h2 className="f1-l-1 cl2">News List</h2>
-        </div>
-        {/* Feature News */}
-        <section className="bg0">
-          <div className="container">
-            <div className="row m-rl--1">
-              <div className="col-12 p-rl-1 p-b-2">
-                <div
-                  className="bg-img1 size-a-3 how1 pos-relative"
-                  style={{ backgroundImage: "url(images/entertaiment-16.jpg)" }}
-                >
+            {/* Feature News */}
+            <section className="bg0">
+              <div className="container">
+                <h1 className="f1-l-1 mb-3 ml-1">{"Mới nhất"}</h1>
+                <div className="row m-rl--1">{list_feature_news}</div>
+              </div>
+            </section>
+            <br />
+            {/* Breadcrumb*/}
+            <div className="container">
+              <div className="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
+                <div className="f2-s-1 p-r-30 m-tb-6">
+                  <Link to="/" className="breadcrumb-item f1-m-3 cl9">
+                    Trang chủ
+                  </Link>
+                  <span className="breadcrumb-item f1-m-3 cl9">
+                    {category.name}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* List News */}
+            <section className="bg0 p-b-55">
+              <div className="container">
+                <div className="row justify-content-center">
+                  <div className="col-md-10 col-lg-8 p-b-80">
+                    <div className="p-r-10 p-r-0-sr991" id="listnews">
+                      <h1 className="f1-l-1 mt-2">{"Cũ hơn"}</h1>
+                      <div className="mt-40 pb-40">
+                        <span id="checkpoint_news"></span>
+                        {list_news}
+                      </div>
+                      <div className="flex-wr-s-c m-rl--7 p-t-15">
+                        {/* <a
+                    href="#"
+                    className="flex-c-c pagi-item hov-btn1 trans-03 m-all-7 pagi-active"
+                  >
+                    1
+                  </a>
                   <a
-                    href="blog-detail-01.html"
-                    className="dis-block how1-child1 trans-03"
-                  />
-                  <div className="flex-col-e-s s-full p-rl-25 p-tb-20">
-                    <a
-                      href="#"
-                      className="dis-block how1-child2 f1-s-2 cl0 bo-all-1 bocl0 hov-btn1 trans-03 p-rl-5 p-t-2"
-                    >
-                      Celebrity
-                    </a>
-                    <h3 className="how1-child2 m-t-14 m-b-10">
-                      <a
-                        href="blog-detail-01.html"
-                        className="how-txt1 size-a-6 f1-l-1 cl0 hov-cl10 trans-03"
-                      >
-                        Music quisque at ipsum vel orci eleifend ultrices
-                      </a>
-                    </h3>
-                    <span className="how1-child2">
-                      <span className="f1-s-4 cl11">Jack Sims</span>
-                      <span className="f1-s-3 cl11 m-rl-3">-</span>
-                      <span className="f1-s-3 cl11">Feb 16</span>
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <FeatureNewsItem />
-              <FeatureNewsItem />
-              <FeatureNewsItem />
-              <FeatureNewsItem />
-            </div>
-          </div>
-        </section>
-        <br />
-        {/* List News */}
-        <section className="bg0 p-b-55">
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-md-10 col-lg-8 p-b-80">
-                <div className="p-r-10 p-r-0-sr991">
-                  <div className="m-t--40 p-b-40">
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
-                    <NewsItem />
-                  </div>
-                  <div class="flex-wr-s-c m-rl--7 p-t-15">
-                    <a
-                      href="#"
-                      class="flex-c-c pagi-item hov-btn1 trans-03 m-all-7 pagi-active"
-                    >
-                      1
-                    </a>
-                    <a
-                      href="#"
-                      class="flex-c-c pagi-item hov-btn1 trans-03 m-all-7"
-                    >
-                      2
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-10 col-lg-4 p-b-80">
-                <div className="p-l-10 p-rl-0-sr991">
-                  {/* Most Popular */}
-                  <MostPopularNews/>
-                  {/* Tag */}
-                  <div>
-                    <div className="how2 how2-cl4 flex-s-c m-b-30">
-                      <h3 className="f1-m-2 cl3 tab01-title">Tags</h3>
+                    href="#"
+                    className="flex-c-c pagi-item hov-btn1 trans-03 m-all-7"
+                  >
+                    2
+                  </a> */}
+                        <div
+                          onClick={(e) => {
+                            scrollOnTopList(e);
+                          }}
+                          href="#listnew"
+                        >
+                          <Pagination
+                            activePage={current_page}
+                            totalItemsCount={total}
+                            itemsCountPerPage={per_page}
+                            onChange={(pageNumber) =>
+                              this.getNewsNextPage(category.id, pageNumber)
+                            }
+                            itemClass="page-item"
+                            linkClass="page-link"
+                            firstPageText={"Đầu"}
+                            lastPageText={"Cuối"}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-wr-s-s m-rl--5">
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Fashion
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Lifestyle
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Denim
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Streetstyle
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Crafts
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Magazine
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        News
-                      </a>
-                      <a
-                        href="#"
-                        className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                      >
-                        Blogs
-                      </a>
+                  </div>
+                  <div className="col-md-10 col-lg-4 p-b-80">
+                    <div className="p-l-10 p-rl-0-sr991">
+                      {/* Most Popular */}
+                      <MostPopularNews hot_news={hot_news_in_week} />
+                      {/* Tag */}
+                      <div>
+                        <div className="how2 how2-cl4 flex-s-c m-b-30">
+                          <h3 className="f1-m-2 cl3 tab01-title">Tags</h3>
+                        </div>
+                        <div className="flex-wr-s-s m-rl--5">
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Fashion
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Lifestyle
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Denim
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Streetstyle
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Crafts
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Magazine
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            News
+                          </a>
+                          <a
+                            href="#"
+                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
+                          >
+                            Blogs
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
-        </section>
-      </div>
+        )}
+      </>
     );
   }
 }
 
-export default CategoryPage;
+const mapStateToProps = (state) => {
+  return {
+    category_show_news: state.category_show_news,
+    hot_news_in_week: state.hot_news_in_week,
+    feature_news_for_cate: state.feature_news_for_cate,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    getCategoryWithNews: (category_id) => {
+      return dispatch(getCategoryWithNewsRequest(category_id));
+    },
+    getCategoryWithNewsNextPage: (category_id, pageNumber) => {
+      return dispatch(
+        getCategoryWithNewsNextPageRequest(category_id, pageNumber)
+      );
+    },
+    hotNewsInWeek: () => {
+      return dispatch(hotNewsInWeekRequest());
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);

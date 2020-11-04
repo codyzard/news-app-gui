@@ -1,13 +1,8 @@
 import React, { Component } from "react";
-import BackToTop from "../Common/Controls/BackToTop";
-import Headline from "../Common/Controls/Headline";
-import Footer from "../Common/Footers/Footer";
 import Banner from "../Common/Headers/Banner";
-import Header from "../Common/Headers/Header";
-import ModalVideo from "../Common/Modals/ModalVideo";
 import CommonNews from "../Homepage/CommonNews/CommonNews";
 import FeatureNews from "../Homepage/FeatureNews";
-import LatestNews from "../Homepage/LatestNews";
+import LatestNews from "./RandomLatestNews/LatestNews";
 
 class Homepage extends Component {
   render() {
