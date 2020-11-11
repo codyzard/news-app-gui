@@ -1,6 +1,43 @@
 import React, { Component } from "react";
-
+import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom'
+import {getNewsBySearchRequest, clearTagWithNews} from '../../../actions/index'
 class Headline extends Component {
+  state = {search: ''}
+  loadHotNews = () => {
+    var { hot_news_in_week } = this.props;
+    if (hot_news_in_week) {
+      var list_trending = hot_news_in_week.map((news, index) => {
+        return (
+          <span className="dis-inline-block slide100-txt-item animated visible-false">
+            {news.title}
+          </span>
+        );
+      });
+    }
+    return list_trending
+  };
+  onHandleSearch = async (e) => {
+    var {search} = this.state;
+    var spilit_keyword = search.replaceAll(' ', '+');
+    var props = this.props
+    await this.props.getNewsBySearch(search);
+    this.props.clearTagWithNews();
+    this.props.history.push('/control/search/'+spilit_keyword,{
+      search: search,
+    });
+  }
+  onChangeInput = (e) => {
+    var {name, value}  = e.target;
+    this.setState({
+      [name]: value
+    })
+  }
+  handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      this.onHandleSearch(event);
+    }
+  }
   render() {
     return (
       <div className="container" id="list_feature_news">
@@ -12,6 +49,9 @@ class Headline extends Component {
               data-in="fadeInDown"
               data-out="fadeOutDown"
             >
+              <span className="dis-inline-block slide100-txt-item animated visible-false">
+                Interest rate angst trips up US equity bull market
+              </span>
               <span className="dis-inline-block slide100-txt-item animated visible-false">
                 Interest rate angst trips up US equity bull market
               </span>
@@ -29,8 +69,10 @@ class Headline extends Component {
               type="text"
               name="search"
               placeholder="Search"
+              onChange={(e) => this.onChangeInput(e)}
+              onKeyPress={(e) => this.handleKeyPress(e)}
             />
-            <button className="flex-c-c size-a-1 ab-t-r fs-20 cl2 hov-cl10 trans-03">
+            <button className="flex-c-c size-a-1 ab-t-r fs-20 cl2 hov-cl10 trans-03" onClick={(e) => this.onHandleSearch(e)}>
               <i className="zmdi zmdi-search" />
             </button>
           </div>
@@ -40,4 +82,23 @@ class Headline extends Component {
   }
 }
 
-export default Headline;
+const mapStateToProps = (state) => {
+  return {
+    hot_news_in_week: state.hot_news_in_week,
+    search_show_news: state.search_show_news,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    getNewsBySearch: (keyword) => {
+      return dispatch(getNewsBySearchRequest(keyword));
+    },
+    clearTagWithNews: () => {
+      return dispatch(clearTagWithNews());
+    }
+  };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Headline));

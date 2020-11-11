@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import {scrollOnTopFeatureNews} from './../../../utils/helper_func'
 class ItemPost extends Component {
   render() {
     var {news} = this.props
@@ -9,6 +9,7 @@ class ItemPost extends Component {
         <Link
           to={"/news/"+news.id+"-"+news.slug}
           className="size-w-1 wrap-pic-w hov1 trans-03"
+          onClick={(e) => {scrollOnTopFeatureNews(e)}}
         >
           <img src={news.title_img} alt="IMG" />
         </Link>
@@ -17,6 +18,7 @@ class ItemPost extends Component {
             <Link
               to={"/news/"+news.id+"-"+news.slug}
               className="f1-s-5 cl3 hov-cl10 trans-03"
+              onClick={(e) => {scrollOnTopFeatureNews(e)}}
             >
              {news.title}
             </Link>

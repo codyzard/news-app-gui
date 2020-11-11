@@ -3,7 +3,7 @@ import Subscribe from "../Subscribe";
 import FeatureVideo from "../FeatureVideo";
 import NewsItemLatest from "./NewsItemLatest";
 import Tagging from "../Tagging";
-import { randomLatestNewsRequest } from "../../../actions/index";
+import { randomLatestNewsRequest} from "../../../actions/index";
 import { connect } from "react-redux";
 import { Puff } from "@agney/react-loading";
 class LatestNews extends Component {
@@ -21,7 +21,7 @@ class LatestNews extends Component {
   }
   render() {
     var title = "Tin mới ngẫu nhiên";
-    var { random_latest_news } = this.props;
+    var { random_latest_news, tags } = this.props;
     var { loading } = this.state;
     var list_random_latest_news = random_latest_news.map((n, index) => {
       return <NewsItemLatest key={index} news={n} />;
@@ -47,7 +47,7 @@ class LatestNews extends Component {
                     {/* Subscribe */}
                     <Subscribe />
                     {/* Tag */}
-                    <Tagging />
+                    <Tagging tags={tags}/>
                   </div>
                 </div>
               </div>

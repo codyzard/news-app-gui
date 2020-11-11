@@ -13,6 +13,7 @@ import Pagination from "react-js-pagination";
 import { Link } from "react-router-dom";
 import { scrollOnTopList } from "./../../utils/helper_func";
 import { Puff } from "@agney/react-loading";
+import Tagging from "../Homepage/Tagging";
 class CategoryPage extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,7 @@ class CategoryPage extends Component {
     if (isEmpty(this.props.hot_news_in_week)) {
       this.props.hotNewsInWeek();
     }
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 100));
     this.setState({
       category: category,
       data: this.props.category_show_news,
@@ -46,7 +47,7 @@ class CategoryPage extends Component {
     });
   };
   render() {
-    var category = this.props.location.state.category;
+    var {category} = this.props.location.state;
     var { data, current_page, per_page, total } = this.props.category_show_news;
     var { hot_news_in_week, feature_news_for_cate } = this.props;
     var { loading } = this.state;
@@ -101,18 +102,6 @@ class CategoryPage extends Component {
                         {list_news}
                       </div>
                       <div className="flex-wr-s-c m-rl--7 p-t-15">
-                        {/* <a
-                    href="#"
-                    className="flex-c-c pagi-item hov-btn1 trans-03 m-all-7 pagi-active"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="flex-c-c pagi-item hov-btn1 trans-03 m-all-7"
-                  >
-                    2
-                  </a> */}
                         <div
                           onClick={(e) => {
                             scrollOnTopList(e);
@@ -141,59 +130,7 @@ class CategoryPage extends Component {
                       <MostPopularNews hot_news={hot_news_in_week} />
                       {/* Tag */}
                       <div>
-                        <div className="how2 how2-cl4 flex-s-c m-b-30">
-                          <h3 className="f1-m-2 cl3 tab01-title">Tags</h3>
-                        </div>
-                        <div className="flex-wr-s-s m-rl--5">
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Fashion
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Lifestyle
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Denim
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Streetstyle
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Crafts
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Magazine
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            News
-                          </a>
-                          <a
-                            href="#"
-                            className="flex-c-c size-h-2 bo-1-rad-20 bocl12 f1-s-1 cl8 hov-btn2 trans-03 p-rl-20 p-tb-5 m-all-5"
-                          >
-                            Blogs
-                          </a>
-                        </div>
+                        <Tagging/>
                       </div>
                     </div>
                   </div>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {scrollOnTopFeatureNews} from './../../utils/helper_func'
 
 class NewsItem extends Component {
   render() {
@@ -8,6 +9,7 @@ class NewsItem extends Component {
       <div className="flex-wr-sb-s p-t-40 p-b-15 how-bor2">
         <Link to={"/news/"+news.id+"-"+news.slug}
           className="size-w-8 wrap-pic-w hov1 trans-03 w-full-sr575 m-b-25"
+          onClick={(e) => {scrollOnTopFeatureNews(e)}}
         >
           <img src={news.title_img} alt="IMG" />
         </Link>
@@ -16,6 +18,7 @@ class NewsItem extends Component {
             <Link
               to={"/news/"+news.id+"-"+news.slug}
               className="f1-l-1 cl2 hov-cl10 trans-03 respon2"
+              onClick={(e) => {scrollOnTopFeatureNews(e)}}
             >
               {news.title}
             </Link>

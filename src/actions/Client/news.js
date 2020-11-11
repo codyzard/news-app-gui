@@ -42,3 +42,17 @@ export const featureNews = (feature_news) => {
         feature_news,
     }
 }
+
+export const getNewsDetailRequest = (news_id) => {
+    return (dispatch) => {
+        return callApi('api/news/'+ news_id, 'GET').then(res => {
+            if (res.data) return dispatch(getNewsDetail(res.data.news_detail));
+        })
+    }
+}
+export const getNewsDetail = (news_detail) => {
+    return {
+        type: types.NEWS_DETAIL,
+        news_detail,
+    }
+}

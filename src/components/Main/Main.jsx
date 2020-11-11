@@ -10,6 +10,9 @@ import Homepage from "./../Homepage/Homepage";
 import CategoryPage from "./../CategoryPages/CategoryPage";
 import NewsDetail from "../NewsPages/NewsDetail";
 import { connect } from "react-redux";
+import ControlPage from "../ControlPages/ControlPage";
+import Page404 from "./Page404";
+import MainAdmin from "../Admin/MainAdmin";
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -27,6 +30,11 @@ class Main extends Component {
           <Route path="/" exact component={Homepage}></Route>
           <Route path="/news/:slug" component={NewsDetail}></Route>
           <Route path="/categories/:slug" component={CategoryPage}></Route>
+          <Route path="/control/:slug" component={ControlPage}></Route>
+          <Route component={Page404}></Route>
+          <Switch>
+          <Route path="/admin" component={MainAdmin}/>
+          </Switch>
         </Switch>
         {/* Footer */}
         <Footer />

@@ -2,22 +2,119 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import MostPopularNews from "../CategoryPages/MostPopularNews";
 import { Puff } from "@agney/react-loading";
-
+import { getNewsDetailRequest } from "../../actions/index";
+import { connect } from "react-redux";
+import Tag from "./Tag";
+import EveryImage from "./EveryImage";
+import { isEmpty } from "lodash";
+import EveryLine from "./EveryLine";
+import { FacebookProvider, Comments, Share } from "react-facebook";
+import { APP_FACEBOOK_ID } from "../../constants/Config";
 class NewsDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-    };
-  }
-  async componentDidMount(){
-    await new Promise((r) => setTimeout(r, 1000));
+  state = {
+    loading: true,
+    news_detail: {},
+    getPathname: "",
+  };
+  getIdNews = (pathname) => {
+    if (isEmpty(pathname)) return;
+    var getFirstIndexOfId = pathname.lastIndexOf("/") + 1;
+    var getLastIndexOfId = pathname.indexOf("-");
+    var news_id = pathname.substring(getFirstIndexOfId, getLastIndexOfId);
+    return news_id;
+  };
+  async componentDidMount() {
+    var getPathname = this.props.history.location.pathname;
+    var news_id = this.getIdNews(getPathname);
+    await this.props.getNewsDetail(news_id);
+    await new Promise((r) => setTimeout(r, 100));
     this.setState({
-      loading: false
-    })
+      loading: false,
+      news_detail: this.props.news_detail,
+      getPathname: getPathname,
+    });
+  }
+  static getDerivedStateFromProps(props, prevState) {
+    if (
+      props.history.location.pathname !== prevState.getPathname &&
+      props.news_detail !== prevState.news_detail
+    ) {
+      return {
+        loading: true,
+        news_detail: props.news_detail,
+        getPathname: props.history.location.pathname,
+      };
+    }
+    return null;
+  }
+  async componentDidUpdate(prevProps) {
+    const { news_detail } = this.props;
+    if (prevProps.news_detail !== news_detail) {
+      //kiem tra prevProps !== this.props(this.props sau khi da update)
+      if (news_detail) {
+        await new Promise((r) => setTimeout(r, 100));
+        this.setState({
+          loading: false,
+        });
+      }
+    }
   }
   render() {
-    var { loading } = this.state;
+    var { loading, news_detail } = this.state;
+    var {
+      categories,
+      tags,
+      author,
+      images,
+      content_image_dectect,
+      content,
+    } = news_detail;
+    if (categories) {
+      categories.sort(function (a, b) {
+        return a.parent_cate - b.parent_cate;
+      });
+      var list_cate_breadcrumb = categories.map((category, index) => {
+        return (
+          <Link
+            className="breadcrumb-item f1-m-3 cl9"
+            to={{
+              pathname: `/categories/${category.slug}`,
+              state: {
+                category: category,
+              },
+            }}
+            key={index}
+          >
+            {category.name}
+          </Link>
+        );
+      });
+    }
+    if (tags) {
+      var list_tag = tags.map((tag, index) => {
+        return <Tag key={index} tag={tag} />;
+      });
+    }
+    if (news_detail && content_image_dectect && images && content) {
+      var detect_array = content_image_dectect.split(" ");
+      var content_array = content.split("</p>").filter((item) => {
+        return !isEmpty(item);
+      });
+      console.log(content_array)
+
+      content_array = content_array.map((item) => {
+        return item.replaceAll("<p>", "");
+      });
+      var line_length = 0;
+      var image_length = 0;
+      var body_news = detect_array.map((value, index) => {
+        var check = parseInt(value);
+        if (check === 1) {
+          return <EveryImage key={index} image={images[image_length++]} />;
+        }
+        return <EveryLine key={index} line={content_array[line_length++]} />;
+      });
+    }
     return (
       <>
         {loading ? (
@@ -31,12 +128,7 @@ class NewsDetail extends Component {
                   <Link to="/" className="breadcrumb-item f1-m-3 cl9">
                     Trang chủ
                   </Link>
-                  <span to="" className="breadcrumb-item f1-m-3 cl9">
-                    {"category.name"}
-                  </span>
-                  <span className="breadcrumb-item f1-m-3 cl9">
-                    {/* {news} */}
-                  </span>
+                  {list_cate_breadcrumb}
                 </div>
               </div>
             </div>
@@ -49,8 +141,7 @@ class NewsDetail extends Component {
                       {/* Blog Detail */}
                       <div className="p-b-70">
                         <h3 className="f1-l-3 cl2 p-b-16 p-t-33 respon2">
-                          Nulla non interdum metus non laoreet nisi tellus eget
-                          aliquam lorem pellentesque
+                          {news_detail.title}
                         </h3>
                         <div className="flex-wr-s-s p-b-40">
                           <span className="f1-s-3 cl8 m-r-15">
@@ -58,73 +149,23 @@ class NewsDetail extends Component {
                               href="#"
                               className="f1-s-4 cl8 hov-cl10 trans-03"
                             >
-                              by John Alvarado
+                              {author ? author.name : "By Sport News Wizard"}
                             </a>
                             <span className="m-rl-3">-</span>
-                            <span>Feb 18</span>
+                            <span>{news_detail.date_publish}</span>
                           </span>
-                          <span className="f1-s-3 cl8 m-r-15">5239 Views</span>
-                          <a
-                            href="#"
-                            className="f1-s-3 cl8 hov-cl10 trans-03 m-r-15"
-                          >
-                            0 Comment
-                          </a>
+                          <span className="f1-s-3 cl8 m-r-15">
+                            {"Lượt xem: " + news_detail.view_count}
+                          </span>
                         </div>
-                        <div className="wrap-pic-max-w p-b-30">
-                          <img src="images/blog-list-01.jpg" alt="IMG" />
-                        </div>
-                        <p className="f1-s-11 cl6 p-b-25">
-                          Curabitur volutpat bibendum molestie. Vestibulum
-                          ornare gravida semper. Aliquam a dui suscipit,
-                          fringilla metus id, maximus leo. Vivamus sapien arcu,
-                          mollis eu pharetra vitae, condimentum in orci. Integer
-                          eu sodales dolor. Maecenas elementum arcu eu convallis
-                          rhoncus. Donec tortor sapien, euismod a faucibus eget,
-                          porttitor quis libero.
-                        </p>
-                        <p className="f1-s-11 cl6 p-b-25">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing
-                          elit. Nunc sit amet est vel orci luctus sollicitudin.
-                          Duis eleifend vestibulum justo, varius semper lacus
-                          condimentum dictum. Donec pulvinar a magna ut
-                          malesuada. In posuere felis diam, vel sodales metus
-                          accumsan in. Duis viverra dui eu pharetra
-                          pellentesque. Donec a eros leo. Quisque sed ligula
-                          vitae lorem efficitur faucibus. Praesent sit amet
-                          imperdiet ante. Nulla id tellus auctor, dictum libero
-                          a, malesuada nisi. Nulla in porta nibh, id vestibulum
-                          ipsum. Praesent dapibus tempus erat quis aliquet.
-                          Donec ac purus id sapien condimentum feugiat.
-                        </p>
-                        <p className="f1-s-11 cl6 p-b-25">
-                          Praesent vel mi bibendum, finibus leo ac, condimentum
-                          arcu. Pellentesque sem ex, tristique sit amet suscipit
-                          in, mattis imperdiet enim. Integer tempus justo nec
-                          velit fringilla, eget eleifend neque blandit. Sed
-                          tempor magna sed congue auctor. Mauris eu turpis eget
-                          tortor ultricies elementum. Phasellus vel placerat
-                          orci, a venenatis justo. Phasellus faucibus venenatis
-                          nisl vitae vestibulum. Praesent id nibh arcu. Vivamus
-                          sagittis accumsan felis, quis vulputate
-                        </p>
+                        <h3 className="f1-m-3 cl3 mb-4 respon2">
+                          <b>{news_detail.summary}</b>
+                        </h3>
+                        <div>{body_news}</div>
                         {/* Tag */}
                         <div className="flex-s-s p-t-12 p-b-15">
                           <span className="f1-s-12 cl5 m-r-8">Tags:</span>
-                          <div className="flex-wr-s-s size-w-0">
-                            <a
-                              href="#"
-                              className="f1-s-12 cl8 hov-link1 m-r-15"
-                            >
-                              Streetstyle
-                            </a>
-                            <a
-                              href="#"
-                              className="f1-s-12 cl8 hov-link1 m-r-15"
-                            >
-                              Crafts
-                            </a>
-                          </div>
+                          <div className="flex-wr-s-s size-w-0">{list_tag}</div>
                         </div>
                         {/* Share */}
                         <div className="flex-s-s">
@@ -132,13 +173,26 @@ class NewsDetail extends Component {
                             Share:
                           </span>
                           <div className="flex-wr-s-s size-w-0">
-                            <a
+                            <span
                               href="#"
                               className="dis-block f1-s-13 cl0 bg-facebook borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
                             >
                               <i className="fab fa-facebook-f m-r-7" />
-                              Facebook
-                            </a>
+                              <FacebookProvider appId={APP_FACEBOOK_ID}>
+                                <Share href={window.location.href}>
+                                  {({ handleClick, loading }) => (
+                                    <button
+                                      type="button"
+                                      disabled={loading}
+                                      onClick={handleClick}
+                                      className="cl0"
+                                    >
+                                      Facebook
+                                    </button>
+                                  )}
+                                </Share>
+                              </FacebookProvider>
+                            </span>
                             <a
                               href="#"
                               className="dis-block f1-s-13 cl0 bg-twitter borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
@@ -166,17 +220,13 @@ class NewsDetail extends Component {
                       {/* Leave a comment */}
                       <div>
                         <h4 className="f1-l-4 cl3 p-b-12">Leave a Comment</h4>
-                        <form>
-                          <textarea
-                            className="bo-1-rad-3 bocl13 size-a-15 f1-s-13 cl5 plh6 p-rl-18 p-tb-14 m-b-20"
-                            name="msg"
-                            placeholder="Comment..."
-                            defaultValue={""}
+                        <FacebookProvider appId={APP_FACEBOOK_ID}>
+                          <Comments
+                            href={window.location.href}
+                            numPosts={5}
+                            colorScheme={"dark"}
                           />
-                          <button className="size-a-17 bg2 borad-3 f1-s-12 cl0 hov-btn1 trans-03 p-rl-15 m-t-10">
-                            Post Comment
-                          </button>
-                        </form>
+                        </FacebookProvider>
                       </div>
                     </div>
                   </div>
@@ -325,4 +375,20 @@ class NewsDetail extends Component {
   }
 }
 
-export default NewsDetail;
+const mapStateToProps = (state) => {
+  return {
+    category_show_news: state.category_show_news,
+    hot_news_in_week: state.hot_news_in_week,
+    news_detail: state.news_detail,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    getNewsDetail: (news_id) => {
+      return dispatch(getNewsDetailRequest(news_id));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsDetail);

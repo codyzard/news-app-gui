@@ -2,7 +2,7 @@ import React from 'react';
 import Homepage from '../components/Homepage/Homepage';
 import NewsDetail from '../components/NewsPages/NewsDetail';
 
-const routes = [
+export const routes = [
     {
         path: "/",
         exact: true,

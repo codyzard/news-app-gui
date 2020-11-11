@@ -48,7 +48,7 @@ class Topbar_DestopHeader extends Component {
           {/* Logo desktop */}
           <div className="logo">
             <Link to="/">
-              <img src="images/icons/logo-01.png" alt="LOGO" />
+              <img src="images/news-main-logo.png" alt="LOGO" />
             </Link>
           </div>
           {/* Banner */}

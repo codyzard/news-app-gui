@@ -1,14 +1,14 @@
 import * as types from "./../constants/ActionTypes";
 var initialState = [];
 
-const feature_news = (state = initialState, action) => {
+const random_tags = (state = initialState, action) => {
   switch (action.type) {
-    case types.FEATURE_NEWS:
-      state = action.feature_news.flat();
+    case types.GET_RANDOM_TAGS:
+      state = action.random_tags;     
       return [...state];
     default:
       return [...state];
   }
 };
 
-export default feature_news;
+export default random_tags;

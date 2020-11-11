@@ -14,7 +14,7 @@ class CommonNews extends Component {
   }
   async componentDidMount() {
     await this.props.getInitCateNewNews();
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 100));
     this.setState({
       loading: false,
     });

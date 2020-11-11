@@ -3,7 +3,7 @@ import callApi from './../../utils/apiCaller';
 export const getAllCategoriesRequest = () => {
     return (dispatch) => {
         return callApi('api/categories/get_all_categories', 'GET').then(res => {
-            if (res.data) dispatch(getAllCategories(res.data.cate_news));
+            if (res.data) return dispatch(getAllCategories(res.data.cate_news));
         })
     }
 }

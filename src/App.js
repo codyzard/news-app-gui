@@ -1,15 +1,15 @@
 import Main from './components/Main/Main'
 import {
   BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
 } from "react-router-dom";
+import FacebookProvider from 'react-facebook/dist/FacebookProvider';
 function App() {
   return (
     <div className="App">
       <Router>
-        <Main/>
+        <FacebookProvider appId="719809908959963">
+          <Main/>
+        </FacebookProvider>
       </Router>
     </div>
   );

@@ -32,7 +32,6 @@ export const getCateNewNews = (change_cate_news) => {
         change_cate_news,
     }
 }
-let cancelToken;
 export const getMenuCateLatestNewsRequest = (category_name) =>{
     return (dispatch) => {
         return callApi('api/news/hover_change_header_cate_news', 'POST', {
