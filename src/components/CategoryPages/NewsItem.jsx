@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {scrollOnTopFeatureNews} from './../../utils/helper_func'
@@ -5,6 +6,13 @@ import {scrollOnTopFeatureNews} from './../../utils/helper_func'
 class NewsItem extends Component {
   render() {
     var {news} = this.props
+    var news_src = ""
+    if(isEmpty(news.author_id)){
+      news_src = news.news_src ? news.news_src : "Lê Hoàng Tú";
+    }
+    else{
+      // news_src = author
+    }
     return (
       <div className="flex-wr-sb-s p-t-40 p-b-15 how-bor2">
         <Link to={"/news/"+news.id+"-"+news.slug}
@@ -24,8 +32,8 @@ class NewsItem extends Component {
             </Link>
           </h5>
           <div className="cl8 p-b-18">
-            <a href="#" className="f1-s-4 cl8 hov-cl10 trans-03">
-              {news.author_id === null ? "By Sport News Wizard" : news.author_id}
+            <a href={"http://"+news_src} className="f1-s-4 cl8 hov-cl10 trans-03">
+              {"Viết bởi " + news_src}
             </a>
             <span className="f1-s-3 m-rl-3">-</span>
             <span className="f1-s-3">{news.date_publish}</span>
@@ -37,7 +45,7 @@ class NewsItem extends Component {
             to={"/news/"+news.id+"-"+news.slug}
             className="f1-s-1 cl9 hov-cl10 trans-03"
           >
-            Read More
+            {"Xem thêm"}
             <i className="m-l-2 fa fa-long-arrow-alt-right" />
           </Link>
         </div>

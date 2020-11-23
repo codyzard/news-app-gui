@@ -6,6 +6,7 @@ import {
   getTagWithNewsRequest,
   getTagWithNewsNextPageRequest,
   getNewsBySearchRequest,
+  getNewsBySearchNextPageRequest,
 } from "../../actions/index";
 import { connect } from "react-redux";
 import { isEmpty } from "lodash";
@@ -23,19 +24,17 @@ class ControlPage extends Component {
     getPathname: "",
   };
   getControl = (pathname) => {
-    if (isEmpty(pathname)) return null; 
-    if(pathname.includes('tags')){
+    if (isEmpty(pathname)) return null;
+    if (pathname.includes("tags")) {
       var getFirstIndexOfId = pathname.lastIndexOf("/") + 1;
       var getLastIndexOfId = pathname.indexOf("-");
       var tag_id = pathname.substring(getFirstIndexOfId, getLastIndexOfId);
       return tag_id;
-    }
-    else if (pathname.includes('search')){
-      var getLastIndexOfKeyword = pathname.lastIndexOf("/")+1;
+    } else if (pathname.includes("search")) {
+      var getLastIndexOfKeyword = pathname.lastIndexOf("/") + 1;
       var keyword = pathname.substr(getLastIndexOfKeyword);
       return keyword;
     }
-   
   };
   initData = async () => {
     var check = this.getControl(this.props.location.pathname);
@@ -47,7 +46,7 @@ class ControlPage extends Component {
         tag: tag,
         data: this.props.tag_show_news,
         loading: false,
-      })
+      });
     } else if (search) {
       await this.props.getNewsBySearch(search);
       await new Promise(() => setTimeout("", 100));
@@ -55,7 +54,7 @@ class ControlPage extends Component {
         search: search,
         data: this.props.search_show_news,
         loading: false,
-      })
+      });
     }
     if (isEmpty(this.props.hot_news_in_week)) {
       this.props.hotNewsInWeek();
@@ -68,18 +67,21 @@ class ControlPage extends Component {
   onBackButtonEvent = () => {
     this.initData();
   };
-  getNewsNextPage = async (tag_id, pageNumber) => {
+  getNewsNextPage = async (type, pageNumber) => {
     var { tag, search } = this.props.location.state;
     if (tag) {
-      await this.props.getTagWithNewsNextPage(tag_id, pageNumber);
+      await this.props.getTagWithNewsNextPage(type, pageNumber);
       this.setState({
         tag: tag,
+        search: "",
         data: this.props.tag_show_news,
       });
     } else if (search) {
-      await this.props.getTagWithNewsNextPage(tag_id, pageNumber);
+      console.log(pageNumber)
+      await this.props.getNewsBySearchNextPage(type, pageNumber);
       this.setState({
         tag: search,
+        tag: null,
         data: this.props.search_show_news,
       });
     }
@@ -94,8 +96,10 @@ class ControlPage extends Component {
           data: tag_show_news,
           getPathname: pathname,
         };
-      } else 
-      if (search_show_news !== prevState.data && pathname.includes("search")) {
+      } else if (
+        search_show_news !== prevState.data &&
+        pathname.includes("search")
+      ) {
         return {
           loading: true,
           data: search_show_news,
@@ -114,7 +118,7 @@ class ControlPage extends Component {
       await new Promise((r) => setTimeout(r, 100));
       this.setState({
         loading: false,
-      })
+      });
     }
   }
   render() {
@@ -176,18 +180,33 @@ class ControlPage extends Component {
                           }}
                           href="#listnews-controlpage"
                         >
-                          <Pagination
-                            activePage={current_page}
-                            totalItemsCount={total}
-                            itemsCountPerPage={per_page}
-                            onChange={(pageNumber) =>
-                              this.getNewsNextPage(tag.id, pageNumber)
-                            }
-                            itemClass="page-item"
-                            linkClass="page-link"
-                            firstPageText={"Đầu"}
-                            lastPageText={"Cuối"}
-                          />
+                          {tag ? (
+                            <Pagination
+                              activePage={current_page}
+                              totalItemsCount={total}
+                              itemsCountPerPage={per_page}
+                              onChange={(pageNumber) =>
+                                this.getNewsNextPage(tag.id, pageNumber)
+                              }
+                              itemClass="page-item"
+                              linkClass="page-link"
+                              firstPageText={"Đầu"}
+                              lastPageText={"Cuối"}
+                            />
+                          ) : (
+                            <Pagination
+                              activePage={current_page}
+                              totalItemsCount={total}
+                              itemsCountPerPage={per_page}
+                              onChange={(pageNumber) =>
+                                this.getNewsNextPage(search, pageNumber)
+                              }
+                              itemClass="page-item"
+                              linkClass="page-link"
+                              firstPageText={"Đầu"}
+                              lastPageText={"Cuối"}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -234,6 +253,9 @@ const mapDispatchToProps = (dispatch, props) => {
     getNewsBySearch: (keyword) => {
       return dispatch(getNewsBySearchRequest(keyword));
     },
+    getNewsBySearchNextPage: (keyword, pageNumber) => {
+      return dispatch(getNewsBySearchNextPageRequest(keyword, pageNumber))
+    }
   };
 };
 

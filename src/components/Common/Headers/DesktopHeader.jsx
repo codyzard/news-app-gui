@@ -34,7 +34,7 @@ class DesktopHeader extends Component {
               {/* Menu desktop */}
               <nav className="menu-desktop">
                 <Link className="logo-stick" to="/">
-                  <img src="images/news-main-logo.png" alt="LOGO" />
+                  <img src="images/logoSTE.png" alt="LOGO" />
                 </Link>
                 <ul className="main-menu">
                   <li>

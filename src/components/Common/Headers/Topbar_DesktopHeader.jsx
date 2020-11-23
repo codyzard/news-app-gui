@@ -18,27 +18,21 @@ class Topbar_DestopHeader extends Component {
                 />
                 <span>HI 58° LO 56°</span>
               </span>
-              <a href="#" className="left-topbar-item">
-                About
-              </a>
-              <a href="#" className="left-topbar-item">
-                Contact
+              <a href="https://fb.com/mrahn123" className="left-topbar-item">
+                {"Liên hệ"}
               </a>
             </div>
             <div className="right-topbar">
-              <a href="#">
+              <a href="https://fb.com/mrahn123">
                 <span className="fab fa-facebook-f" />
               </a>
-              <a href="#">
+              <a href="https://www.instagram.com/pyzchannn/">
+                <span className="fab fa-instagram" />
+              </a>
+              <a href="https://twitter.com/HongTL2">
                 <span className="fab fa-twitter" />
               </a>
-              <a href="#">
-                <span className="fab fa-pinterest-p" />
-              </a>
-              <a href="#">
-                <span className="fab fa-vimeo-v" />
-              </a>
-              <a href="#">
+              <a href="https://www.youtube.com/channel/UCrhndpCQcpdv8ADTTcgHRbQ?view_as=subscriber">
                 <span className="fab fa-youtube" />
               </a>
             </div>
@@ -48,7 +42,7 @@ class Topbar_DestopHeader extends Component {
           {/* Logo desktop */}
           <div className="logo">
             <Link to="/">
-              <img src="images/news-main-logo.png" alt="LOGO" />
+              <img src="images/logoSTE.png" alt="LOGO" style={{height: "110px", width: "100%" }} />
             </Link>
           </div>
           {/* Banner */}

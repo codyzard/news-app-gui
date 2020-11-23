@@ -39,11 +39,21 @@ class Headline extends Component {
     }
   }
   render() {
+    var { hot_news_in_week } = this.props;
+    if (hot_news_in_week) {
+      var list_trending = hot_news_in_week.map((news, index) => {
+        return (
+          <span key={index} className="dis-inline-block slide100-txt-item animated visible-false">
+            {news.title}
+          </span>
+        );
+      });
+    }
     return (
       <div className="container" id="list_feature_news">
         <div className="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
           <div className="f2-s-1 p-r-30 size-w-0 m-tb-6 flex-wr-s-c">
-            <span className="text-uppercase cl2 p-r-8">Trending Now:</span>
+            <span className="text-uppercase cl2 p-r-8">{"Thịnh hành: "}</span>
             <span
               className="dis-inline-block cl6 slide100-txt pos-relative size-w-0"
               data-in="fadeInDown"
@@ -68,7 +78,7 @@ class Headline extends Component {
               className="f1-s-1 cl6 plh9 s-full p-l-25 p-r-45"
               type="text"
               name="search"
-              placeholder="Search"
+              placeholder={"Tìm kiếm"}
               onChange={(e) => this.onChangeInput(e)}
               onKeyPress={(e) => this.handleKeyPress(e)}
             />

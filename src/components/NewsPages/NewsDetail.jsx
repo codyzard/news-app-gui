@@ -68,6 +68,7 @@ class NewsDetail extends Component {
       images,
       content_image_dectect,
       content,
+      news_src,
     } = news_detail;
     if (categories) {
       categories.sort(function (a, b) {
@@ -115,6 +116,12 @@ class NewsDetail extends Component {
         return <EveryLine key={index} line={content_array[line_length++]} />;
       });
     }
+    if(isEmpty(news_detail.author_id)){
+      news_src = news_src ? news_src : "Lê Hoàng Tú";
+    }
+    else{
+      // news_src = author
+    }
     return (
       <>
         {loading ? (
@@ -146,10 +153,10 @@ class NewsDetail extends Component {
                         <div className="flex-wr-s-s p-b-40">
                           <span className="f1-s-3 cl8 m-r-15">
                             <a
-                              href="#"
+                              href={"http://"+news_detail.news_src}
                               className="f1-s-4 cl8 hov-cl10 trans-03"
                             >
-                              {author ? author.name : "By Sport News Wizard"}
+                               {"Viết bởi " + news_src}
                             </a>
                             <span className="m-rl-3">-</span>
                             <span>{news_detail.date_publish}</span>
@@ -238,132 +245,13 @@ class NewsDetail extends Component {
                       {/* Category */}
                       <div className="p-b-60">
                         <div className="how2 how2-cl4 flex-s-c">
-                          <h3 className="f1-m-2 cl3 tab01-title">Category</h3>
+                          <h3 className="f1-m-2 cl3 tab01-title">{"Bài viết liên quan"}</h3>
                         </div>
-                        <ul className="p-t-35">
-                          <li className="how-bor3 p-rl-4">
-                            <a
-                              href="#"
-                              className="dis-block f1-s-10 text-uppercase cl2 hov-cl10 trans-03 p-tb-13"
-                            >
-                              Fashion
-                            </a>
-                          </li>
-                          <li className="how-bor3 p-rl-4">
-                            <a
-                              href="#"
-                              className="dis-block f1-s-10 text-uppercase cl2 hov-cl10 trans-03 p-tb-13"
-                            >
-                              Beauty
-                            </a>
-                          </li>
-                          <li className="how-bor3 p-rl-4">
-                            <a
-                              href="#"
-                              className="dis-block f1-s-10 text-uppercase cl2 hov-cl10 trans-03 p-tb-13"
-                            >
-                              Street Style
-                            </a>
-                          </li>
-                          <li className="how-bor3 p-rl-4">
-                            <a
-                              href="#"
-                              className="dis-block f1-s-10 text-uppercase cl2 hov-cl10 trans-03 p-tb-13"
-                            >
-                              Life Style
-                            </a>
-                          </li>
-                          <li className="how-bor3 p-rl-4">
-                            <a
-                              href="#"
-                              className="dis-block f1-s-10 text-uppercase cl2 hov-cl10 trans-03 p-tb-13"
-                            >
-                              DIY &amp; Crafts
-                            </a>
-                          </li>
+                        <ul className="p-t-35">                        
                         </ul>
                       </div>
                       {/* Archive */}
-                      <div className="p-b-37">
-                        <div className="how2 how2-cl4 flex-s-c">
-                          <h3 className="f1-m-2 cl3 tab01-title">Archive</h3>
-                        </div>
-                        <ul className="p-t-32">
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>July 2018</span>
-                              <span>(9)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>June 2018</span>
-                              <span>(39)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>May 2018</span>
-                              <span>(29)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>April 2018</span>
-                              <span>(35)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>March 2018</span>
-                              <span>(22)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>February 2018</span>
-                              <span>(32)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>January 2018</span>
-                              <span>(21)</span>
-                            </a>
-                          </li>
-                          <li className="p-rl-4 p-b-19">
-                            <a
-                              href="#"
-                              className="flex-wr-sb-c f1-s-10 text-uppercase cl2 hov-cl10 trans-03"
-                            >
-                              <span>December 2017</span>
-                              <span>(26)</span>
-                            </a>
-                          </li>
-                        </ul>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>
