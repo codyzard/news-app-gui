@@ -37,7 +37,6 @@ class ControlPage extends Component {
     }
   };
   initData = async () => {
-    var check = this.getControl(this.props.location.pathname);
     var { tag, search } = this.props.location.state;
     if (tag) {
       await this.props.getTagWithNews(tag.id);

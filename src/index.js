@@ -3,20 +3,15 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createStore, compose, applyMiddleware } from "redux";
-import myReducer from "./reducers/index";
-import {Provider} from "react-redux";
-import thunk from 'redux-thunk';
-
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  myReducer,
-  composeEnhancer(applyMiddleware(thunk)),
-);
+import { store, persistor } from "./reducers/index";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
