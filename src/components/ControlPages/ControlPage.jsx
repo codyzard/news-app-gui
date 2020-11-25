@@ -37,18 +37,17 @@ class ControlPage extends Component {
     }
   };
   initData = async () => {
+    // await new Promise(() => setTimeout("", 100));
     var { tag, search } = this.props.location.state;
-    if (tag) {
+    if (!isEmpty(tag)) {
       await this.props.getTagWithNews(tag.id);
-      await new Promise((r) => setTimeout(r, 100));
       this.setState({
         tag: tag,
         data: this.props.tag_show_news,
         loading: false,
       });
-    } else if (search) {
+    } else if (!isEmpty(search)) {
       await this.props.getNewsBySearch(search);
-      await new Promise(() => setTimeout("", 100));
       this.setState({
         search: search,
         data: this.props.search_show_news,
@@ -76,7 +75,6 @@ class ControlPage extends Component {
         data: this.props.tag_show_news,
       });
     } else if (search) {
-      console.log(pageNumber)
       await this.props.getNewsBySearchNextPage(type, pageNumber);
       this.setState({
         tag: search,
@@ -122,10 +120,9 @@ class ControlPage extends Component {
   }
   render() {
     var { tag, search } = this.props.location.state;
-    var { tag_show_news, search_show_news, hot_news_in_week } = this.props;
-    var { data, current_page, per_page, total } = !isEmpty(tag_show_news)
-      ? tag_show_news
-      : search_show_news;
+    var {data} = this.state
+    var { hot_news_in_week } = this.props;
+    var { data, current_page, per_page, total } = data
     var { loading } = this.state;
     if (!isEmpty(data)) {
       var list_news = data.map((news, index) => {

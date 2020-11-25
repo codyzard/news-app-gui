@@ -101,8 +101,7 @@ class NewsDetail extends Component {
       var content_array = content.split("</p>").filter((item) => {
         return !isEmpty(item);
       });
-      console.log(content_array)
-
+      // console.log(content_array)
       content_array = content_array.map((item) => {
         return item.replaceAll("<p>", "");
       });
