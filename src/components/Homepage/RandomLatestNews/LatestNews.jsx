@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import Subscribe from "../Subscribe";
-import FeatureVideo from "../FeatureVideo";
 import NewsItemLatest from "./NewsItemLatest";
 import Tagging from "../Tagging";
 import { randomLatestNewsRequest} from "../../../actions/index";
@@ -42,11 +40,6 @@ class LatestNews extends Component {
                 </div>
                 <div className="col-md-10 col-lg-4">
                   <div className="p-l-10 p-rl-0-sr991 p-b-20">
-                    {/* Video */}
-                    {/* <FeatureVideo /> */}
-                    {/* Subscribe */}
-                    {/* <Subscribe /> */}
-                    {/* Tag */}
                     <Tagging tags={tags}/>
                   </div>
                 </div>
