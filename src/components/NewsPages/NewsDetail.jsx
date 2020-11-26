@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import MostPopularNews from "../CategoryPages/MostPopularNews";
 import { Puff } from "@agney/react-loading";
 import { getNewsDetailRequest } from "../../actions/index";
 import { connect } from "react-redux";
@@ -64,7 +63,7 @@ class NewsDetail extends Component {
     var {
       categories,
       tags,
-      author,
+      // author,
       images,
       content_image_dectect,
       content,

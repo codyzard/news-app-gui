@@ -83,26 +83,25 @@ class ControlPage extends Component {
       });
     }
   };
-  static getDerivedStateFromProps(props, prevState) {
+  static  getDerivedStateFromProps(props, prevState) {
     var { pathname } = props.history.location;
     var { tag_show_news, search_show_news } = props;
+
     if (pathname !== prevState.getPathname) {
-      if (tag_show_news !== prevState.data && pathname.includes("tags")) {
-        return {
-          loading: true,
-          data: tag_show_news,
-          getPathname: pathname,
-        };
-      } else if (
-        search_show_news !== prevState.data &&
-        pathname.includes("search")
-      ) {
+      if ( search_show_news !== prevState.data && pathname.includes("search")) {
         return {
           loading: true,
           data: search_show_news,
           getPathname: pathname,
         };
       }
+      else if (tag_show_news !== prevState && pathname.includes("tags")) {
+        return {
+          loading: true,
+          data: tag_show_news,
+          getPathname: pathname,
+        };
+      } 
     }
     return null;
   }

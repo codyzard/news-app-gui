@@ -18,6 +18,7 @@ class FeatureNewsItem extends Component {
             <a
               className="dis-block how1-child2 f1-s-2 cl0 bo-all-1 bocl0 hov-btn1 trans-03 p-rl-5 p-t-2"
               style={{color: "white"}}
+              href="#"
             >
               {news.categories[1].name}
             </a>

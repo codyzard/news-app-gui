@@ -20,7 +20,6 @@ class Headline extends Component {
   onHandleSearch = async (e) => {
     var {search} = this.state;
     var spilit_keyword = search.replaceAll(' ', '+');
-    var props = this.props
     await this.props.getNewsBySearch(search);
     this.props.clearTagWithNews();
     this.props.history.push('/control/search/'+spilit_keyword,{
@@ -39,16 +38,6 @@ class Headline extends Component {
     }
   }
   render() {
-    var { hot_news_in_week } = this.props;
-    if (hot_news_in_week) {
-      var list_trending = hot_news_in_week.map((news, index) => {
-        return (
-          <span key={index} className="dis-inline-block slide100-txt-item animated visible-false">
-            {news.title}
-          </span>
-        );
-      });
-    }
     return (
       <div className="container" id="list_feature_news">
         <div className="bg0 flex-wr-sb-c p-rl-20 p-tb-8">
