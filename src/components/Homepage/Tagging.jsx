@@ -12,10 +12,11 @@ class Tagging extends Component {
     await this.props.getRandomTags();
   }
   getNewsBaseTag = async (tag_id) => {
-    if (this.props.news_detail !== {}) {
-      await this.props.getTagWithNews(tag_id);
-      this.props.clearSearchWithNews();
-    }
+    // if (this.props.news_detail !== {}) {
+    //   await this.props.getTagWithNews(tag_id);
+    //   this.props.clearSearchWithNews();
+    // }
+    await this.props.getTagWithNews(tag_id);
   };
   render() {
     var { tags } = this.props;

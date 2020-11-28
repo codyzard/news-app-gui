@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom'
@@ -19,9 +20,12 @@ class Headline extends Component {
   };
   onHandleSearch = async (e) => {
     var {search} = this.state;
+    if(isEmpty(search)){
+      alert("Xin hãy nhập từ khóa");
+      return;
+    }
     var spilit_keyword = search.replaceAll(' ', '+');
     await this.props.getNewsBySearch(search);
-    this.props.clearTagWithNews();
     this.props.history.push('/control/search/'+spilit_keyword,{
       search: search,
     });

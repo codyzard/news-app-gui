@@ -77,7 +77,7 @@ class ControlPage extends Component {
     } else if (search) {
       await this.props.getNewsBySearchNextPage(type, pageNumber);
       this.setState({
-        tag: search,
+        search: search,
         tag: null,
         data: this.props.search_show_news,
       });
@@ -86,8 +86,8 @@ class ControlPage extends Component {
   static  getDerivedStateFromProps(props, prevState) {
     var { pathname } = props.history.location;
     var { tag_show_news, search_show_news } = props;
-
     if (pathname !== prevState.getPathname) {
+  
       if ( search_show_news !== prevState.data && pathname.includes("search")) {
         return {
           loading: true,
@@ -95,7 +95,7 @@ class ControlPage extends Component {
           getPathname: pathname,
         };
       }
-      else if (tag_show_news !== prevState && pathname.includes("tags")) {
+      else if (tag_show_news !== prevState.data && pathname.includes("tags")) {
         return {
           loading: true,
           data: tag_show_news,
@@ -107,13 +107,12 @@ class ControlPage extends Component {
   }
   async componentDidUpdate(prevProps) {
     const { tag_show_news, search_show_news } = this.props;
-    if (
-      prevProps.tag_show_news !== tag_show_news ||
-      prevProps.search_show_news !== search_show_news
-    ) {
+    var data = !isEmpty(tag_show_news) ?  tag_show_news : search_show_news
+    if (!isEmpty(data)) {
       await new Promise((r) => setTimeout(r, 100));
       this.setState({
         loading: false,
+        data: data,
       });
     }
   }
@@ -121,10 +120,10 @@ class ControlPage extends Component {
     var { tag, search } = this.props.location.state;
     var {data} = this.state
     var { hot_news_in_week } = this.props;
-    var { data, current_page, per_page, total } = data
+    var { current_page, per_page, total } = data
     var { loading } = this.state;
-    if (!isEmpty(data)) {
-      var list_news = data.map((news, index) => {
+    if (!isEmpty(data.data)) {
+      var list_news = data.data.map((news, index) => {
         return <NewsItem key={index} news={news} />;
       });
     }

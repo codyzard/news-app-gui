@@ -41,17 +41,6 @@ class DesktopHeader extends Component {
                     <Link to="/">{"Trang chủ"}</Link>
                   </li>
                   {categoryList}
-                  <li>
-                    <a href="#">Features</a>
-                    <ul className="sub-menu">
-                      <li>
-                        <a href="category-01.html">Category Page v1</a>
-                      </li>
-                      <li>
-                        <a href="category-02.html">Category Page v2</a>
-                      </li>
-                    </ul>
-                  </li>
                 </ul>
               </nav>
             </div>

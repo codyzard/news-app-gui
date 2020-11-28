@@ -6,7 +6,7 @@ const tag_show_news = (state = initialState, action) => {
         case types.GET_TAG_WITH_NEWS:
             state = action.news_base_tag;
             return {...state};
-        case types.CLEAR_TAG_WITH_NEWS:
+        case types.SEARCH_NEWS:
             state = {};
             return {...state};
         default: return state;

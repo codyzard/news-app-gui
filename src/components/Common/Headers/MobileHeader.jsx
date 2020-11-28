@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import Category from "./Category";
 
 class MobileHeader extends Component {
   render() {
@@ -87,20 +86,6 @@ class MobileHeader extends Component {
               <Link to="/">Home</Link>
             </li>
             {categoryList}
-            <li>
-              <a href="#">Features</a>
-              <ul className="sub-menu-m">
-                <li>
-                  <a href="category-01.html">Category Page v1</a>
-                </li>
-                <li>
-                  <a href="category-02.html">Category Page v2</a>
-                </li>
-              </ul>
-              <span className="arrow-main-menu-m">
-                <i className="fa fa-angle-right" aria-hidden="true" />
-              </span>
-            </li>
           </ul>
         </div>
         {/*  */}

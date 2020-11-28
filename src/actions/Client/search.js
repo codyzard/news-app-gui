@@ -12,7 +12,6 @@ export const getNewsBySearchRequest = (keyword) => {
 };
 
 export const getNewsBySearchNextPageRequest = (keyword, pageNumber) => {
-  console.log(pageNumber);
   return (dispatch) => {
     return callApi("api/search/news_base_keyword?page="+pageNumber, "POST", {
       keyword: keyword,
