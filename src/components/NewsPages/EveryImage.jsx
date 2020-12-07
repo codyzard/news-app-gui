@@ -6,7 +6,7 @@ class EveryImage extends Component {
     return (
       <div className="wrap-pic-max-w p-b-30">
         <img src={image ? image.src : ""} alt="IMG" />
-        <figcaption style={{textAlign: "center"}}>{image && image.description ? image.description : ""}</figcaption>
+        <figcaption>{image && image.description ? image.description : ""}</figcaption>
       </div>
     );
   }

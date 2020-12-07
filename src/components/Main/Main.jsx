@@ -13,36 +13,51 @@ import { connect } from "react-redux";
 import ControlPage from "../ControlPages/ControlPage";
 import Page404 from "./Page404";
 import MainAdmin from "../Admin/MainAdmin";
+import { Puff } from "@agney/react-loading";
 class Main extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    loading: true,
   }
-
-  render() {
-    return (
+  async componentDidMount(){
+    this.setState({loading: false})
+  }
+  renderContent = () => {
+    return ( 
       <div>
-        {/* HEADER */}
-        <Header />
-        {/* Headline */}
-        <Headline />
-        {/* Homepage */}
+      {/* HEADER */}
+      <Header />
+      {/* Headline */}
+      <Headline />
+      {/* Homepage */}
+      <Switch>
+        <Route path="/" exact component={Homepage}></Route>
+        <Route path="/news/:slug" component={NewsDetail}></Route>
+        <Route path="/categories/:slug" component={CategoryPage}></Route>
+        <Route path="/control/:slug" component={ControlPage}></Route>
+        <Route component={Page404}></Route>
         <Switch>
-          <Route path="/" exact component={Homepage}></Route>
-          <Route path="/news/:slug" component={NewsDetail}></Route>
-          <Route path="/categories/:slug" component={CategoryPage}></Route>
-          <Route path="/control/:slug" component={ControlPage}></Route>
-          <Route component={Page404}></Route>
-          <Switch>
-          <Route path="/admin" component={MainAdmin}/>
-          </Switch>
+        <Route path="/admin" component={MainAdmin}/>
         </Switch>
-        {/* Footer */}
-        <Footer />
-        {/* Back to top */}
-        <BackToTop />
-        {/* Modal Video 01*/}
-        <ModalVideo />
-      </div>
+      </Switch>
+      {/* Footer */}
+      <Footer />
+      {/* Back to top */}
+      <BackToTop />
+      {/* Modal Video 01*/}
+      <ModalVideo />
+    </div>
+  
+    )
+  }
+  renderLoading = () => {
+    return <Puff color="#00BFFF" height="724" width="100%" />
+  }
+  render() {
+    var {loading} = this.state;
+    return (
+      <> 
+        {loading ? this.renderLoading() : this.renderContent()}
+      </>
     );
   }
 }

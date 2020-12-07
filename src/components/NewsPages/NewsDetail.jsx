@@ -5,10 +5,11 @@ import { getNewsDetailRequest } from "../../actions/index";
 import { connect } from "react-redux";
 import Tag from "./Tag";
 import EveryImage from "./EveryImage";
-import { isEmpty } from "lodash";
+import { isEmpty, join } from "lodash";
 import EveryLine from "./EveryLine";
 import { FacebookProvider, Comments, Share } from "react-facebook";
 import { APP_FACEBOOK_ID } from "../../constants/Config";
+import ReactHtmlParser  from 'react-html-parser'
 class NewsDetail extends Component {
   state = {
     loading: true,
@@ -25,7 +26,9 @@ class NewsDetail extends Component {
   async componentDidMount() {
     var getPathname = this.props.history.location.pathname;
     var news_id = this.getIdNews(getPathname);
-    await this.props.getNewsDetail(news_id);
+    await this.props.getNewsDetail(news_id).catch(err => {
+      this.props.history.push('/404NotFound')
+    });
     await new Promise((r) => setTimeout(r, 100));
     this.setState({
       loading: false,
@@ -63,12 +66,14 @@ class NewsDetail extends Component {
     var {
       categories,
       tags,
-      // author,
+      user,
       images,
       content_image_dectect,
       content,
       news_src,
+      html_content
     } = news_detail;
+    console.log(news_detail);
     if (categories) {
       categories.sort(function (a, b) {
         return a.parent_cate - b.parent_cate;
@@ -95,18 +100,18 @@ class NewsDetail extends Component {
         return <Tag key={index} tag={tag} />;
       });
     }
-    if (news_detail && content_image_dectect && images && content) {
+    if (!isEmpty(news_detail) && content_image_dectect && images && content) {
       var detect_array = content_image_dectect.split(" ");
       var content_array = content.split("</p>").filter((item) => {
         return !isEmpty(item);
       });
-      // console.log(content_array)
       content_array = content_array.map((item) => {
         return item.replaceAll("<p>", "");
       });
       var line_length = 0;
       var image_length = 0;
-      var body_news = detect_array.map((value, index) => {
+      var body_news;
+      body_news = detect_array.map((value, index) => {
         var check = parseInt(value);
         if (check === 1) {
           return <EveryImage key={index} image={images[image_length++]} />;
@@ -114,11 +119,24 @@ class NewsDetail extends Component {
         return <EveryLine key={index} line={content_array[line_length++]} />;
       });
     }
-    if(isEmpty(news_detail.author_id)){
-      news_src = news_src ? news_src : "Lê Hoàng Tú";
+    else if(!isEmpty(news_detail) && !isEmpty(html_content)){
+      var body_arr = html_content.split('</p>');
+      body_arr = body_arr.map((e) => {
+        e += "</p>";
+        e = e.replace("<p>", `<p class="f1-s-11 cl6 p-b-25">`)
+        e = e.replace("<figcaption>", `<figcaption style={{textAlign: "center"}}>`)
+        e = e.replace(`<figure class="image">`, `<div className="wrap-pic-max-w p-b-30 author-create"><figure>`)
+        e = e.replace("</figure>", `</figure></div>`)
+        e = e.replaceAll('<img ', `<img width="100%"`);
+        return e;
+      })
+      body_news = ReactHtmlParser(join(body_arr, " "))
+    }
+    if(isEmpty(user)){
+      var author = news_src ? news_src : "Lê Hoàng Tú";
     }
     else{
-      // news_src = author
+      author = user.name;
     }
     return (
       <>
@@ -151,10 +169,10 @@ class NewsDetail extends Component {
                         <div className="flex-wr-s-s p-b-40">
                           <span className="f1-s-3 cl8 m-r-15">
                             <a
-                              href={"http://"+news_detail.news_src}
+                              href={news_src ? "http://"+news_detail.news_src : ""}
                               className="f1-s-4 cl8 hov-cl10 trans-03"
                             >
-                               {"Viết bởi " + news_src}
+                               {"Viết bởi " + author}
                             </a>
                             <span className="m-rl-3">-</span>
                             <span>{news_detail.date_publish}</span>
@@ -166,16 +184,18 @@ class NewsDetail extends Component {
                         <h3 className="f1-m-3 cl3 mb-4 respon2">
                           <b>{news_detail.summary}</b>
                         </h3>
-                        <div>{body_news}</div>
+                        <div>
+                          {body_news}
+                        </div>
                         {/* Tag */}
                         <div className="flex-s-s p-t-12 p-b-15">
-                          <span className="f1-s-12 cl5 m-r-8">Tags:</span>
+                          <span className="f1-s-12 cl5 m-r-8">Nhãn:</span>
                           <div className="flex-wr-s-s size-w-0">{list_tag}</div>
                         </div>
                         {/* Share */}
                         <div className="flex-s-s">
                           <span className="f1-s-12 cl5 p-t-1 m-r-15">
-                            Share:
+                            Chia sẻ:
                           </span>
                           <div className="flex-wr-s-s size-w-0">
                             <span
@@ -184,7 +204,7 @@ class NewsDetail extends Component {
                             >
                               <i className="fab fa-facebook-f m-r-7" />
                               <FacebookProvider appId={APP_FACEBOOK_ID}>
-                                <Share href={window.location.href}>
+                                <Share href={`http://127.0.0.1:4000/${window.location.pathname}`}>
                                   {({ handleClick, loading }) => (
                                     <button
                                       type="button"
@@ -224,7 +244,7 @@ class NewsDetail extends Component {
                       </div>
                       {/* Leave a comment */}
                       <div>
-                        <h4 className="f1-l-4 cl3 p-b-12">Leave a Comment</h4>
+                        <h4 className="f1-l-4 cl3 p-b-12">Để lại bình luận</h4>
                         <FacebookProvider appId={APP_FACEBOOK_ID}>
                           <Comments
                             href={window.location.href}

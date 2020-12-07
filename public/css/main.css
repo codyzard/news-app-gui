@@ -1970,3 +1970,16 @@ a.breadcrumb-item:hover {
     padding-top: 110px;
   }
 }
+
+.parse_html.p{
+  font-family: Roboto-Regular;
+  font-size: 14px;
+  line-height: 1.8;
+}
+figcaption{
+  text-align: center;
+}
+
+.author-create figure img{
+  width: 1% !important;
+}

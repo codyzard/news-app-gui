@@ -1,5 +1,6 @@
 import * as types from './../../constants/ActionTypes';
 import callApi from './../../utils/apiCaller';
+import callApiNoneMessage from "../../utils/apiCallerNoneMessage";
 
 export const randomLatestNewsRequest = () => {
     return (dispatch) => {
@@ -45,7 +46,7 @@ export const featureNews = (feature_news) => {
 
 export const getNewsDetailRequest = (news_id) => {
     return (dispatch) => {
-        return callApi('api/news/'+ news_id, 'GET').then(res => {
+        return callApiNoneMessage('api/news/'+ news_id, 'GET').then(res => {
             if (res.data) return dispatch(getNewsDetail(res.data.news_detail));
         })
     }

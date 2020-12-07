@@ -31,6 +31,7 @@ class CategoryPage extends Component {
     if (isEmpty(this.props.hot_news_in_week)) {
       this.props.hotNewsInWeek();
     }
+    console.log(this.props.location);
     await new Promise((r) => setTimeout(r, 100));
     this.setState({
       category: category,
@@ -56,9 +57,11 @@ class CategoryPage extends Component {
         return <NewsItem key={index} news={news} />;
       });
     }
-    var list_feature_news = feature_news_for_cate.map((news, index) => {
-      return <FeatureNewsItem key={index} news={news} />;
-    });
+    if(!isEmpty(feature_news_for_cate)){
+      var list_feature_news = feature_news_for_cate.map((news, index) => {
+        return <FeatureNewsItem key={index} news={news} />;
+      });
+    }
     return (
       <>
         {loading ? (
