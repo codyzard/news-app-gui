@@ -9,7 +9,7 @@ import { isEmpty, join } from "lodash";
 import EveryLine from "./EveryLine";
 import { FacebookProvider, Comments, Share } from "react-facebook";
 import { APP_FACEBOOK_ID } from "../../constants/Config";
-import ReactHtmlParser  from 'react-html-parser'
+import ReactHtmlParser from "react-html-parser";
 class NewsDetail extends Component {
   state = {
     loading: true,
@@ -26,8 +26,8 @@ class NewsDetail extends Component {
   async componentDidMount() {
     var getPathname = this.props.history.location.pathname;
     var news_id = this.getIdNews(getPathname);
-    await this.props.getNewsDetail(news_id).catch(err => {
-      this.props.history.push('/404NotFound')
+    await this.props.getNewsDetail(news_id).catch((err) => {
+      this.props.history.push("/404NotFound");
     });
     await new Promise((r) => setTimeout(r, 100));
     this.setState({
@@ -71,7 +71,7 @@ class NewsDetail extends Component {
       content_image_dectect,
       content,
       news_src,
-      html_content
+      html_content,
     } = news_detail;
     console.log(news_detail);
     if (categories) {
@@ -118,24 +118,28 @@ class NewsDetail extends Component {
         }
         return <EveryLine key={index} line={content_array[line_length++]} />;
       });
-    }
-    else if(!isEmpty(news_detail) && !isEmpty(html_content)){
-      var body_arr = html_content.split('</p>');
+    } else if (!isEmpty(news_detail) && !isEmpty(html_content)) {
+      var body_arr = html_content.split("</p>");
       body_arr = body_arr.map((e) => {
         e += "</p>";
-        e = e.replace("<p>", `<p class="f1-s-11 cl6 p-b-25">`)
-        e = e.replace("<figcaption>", `<figcaption style={{textAlign: "center"}}>`)
-        e = e.replace(`<figure class="image">`, `<div className="wrap-pic-max-w p-b-30 author-create"><figure>`)
-        e = e.replace("</figure>", `</figure></div>`)
-        e = e.replaceAll('<img ', `<img width="100%"`);
+        e = e.replace("<p>", `<p class="f1-s-11 cl6 p-b-25">`);
+        e = e.replace(
+          "<figcaption>",
+          `<figcaption style={{textAlign: "center"}}>`
+        );
+        e = e.replace(
+          `<figure class="image">`,
+          `<div className="wrap-pic-max-w p-b-30 author-create"><figure>`
+        );
+        e = e.replace("</figure>", `</figure></div>`);
+        e = e.replaceAll("<img ", `<img width="100%"`);
         return e;
-      })
-      body_news = ReactHtmlParser(join(body_arr, " "))
+      });
+      body_news = ReactHtmlParser(join(body_arr, " "));
     }
-    if(isEmpty(user)){
+    if (isEmpty(user)) {
       var author = news_src ? news_src : "Lê Hoàng Tú";
-    }
-    else{
+    } else {
       author = user.name;
     }
     return (
@@ -169,10 +173,12 @@ class NewsDetail extends Component {
                         <div className="flex-wr-s-s p-b-40">
                           <span className="f1-s-3 cl8 m-r-15">
                             <a
-                              href={news_src ? "http://"+news_detail.news_src : ""}
+                              href={
+                                news_src ? "http://" + news_detail.news_src : ""
+                              }
                               className="f1-s-4 cl8 hov-cl10 trans-03"
                             >
-                               {"Viết bởi " + author}
+                              {"Viết bởi " + author}
                             </a>
                             <span className="m-rl-3">-</span>
                             <span>{news_detail.date_publish}</span>
@@ -184,9 +190,7 @@ class NewsDetail extends Component {
                         <h3 className="f1-m-3 cl3 mb-4 respon2">
                           <b>{news_detail.summary}</b>
                         </h3>
-                        <div>
-                          {body_news}
-                        </div>
+                        <div>{body_news}</div>
                         {/* Tag */}
                         <div className="flex-s-s p-t-12 p-b-15">
                           <span className="f1-s-12 cl5 m-r-8">Nhãn:</span>
@@ -204,7 +208,9 @@ class NewsDetail extends Component {
                             >
                               <i className="fab fa-facebook-f m-r-7" />
                               <FacebookProvider appId={APP_FACEBOOK_ID}>
-                                <Share href={`http://127.0.0.1:4000/${window.location.pathname}`}>
+                                <Share
+                                  href={`http://127.0.0.1:4000/${window.location.pathname}`}
+                                >
                                   {({ handleClick, loading }) => (
                                     <button
                                       type="button"
@@ -220,25 +226,26 @@ class NewsDetail extends Component {
                             </span>
                             <a
                               href="#"
-                              className="dis-block f1-s-13 cl0 bg-twitter borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
-                            >
-                              <i className="fab fa-twitter m-r-7" />
-                              Twitter
-                            </a>
-                            <a
-                              href="#"
                               className="dis-block f1-s-13 cl0 bg-google borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
                             >
                               <i className="fab fa-google-plus-g m-r-7" />
                               Google+
                             </a>
+                            {/* <a
+                              href="#"
+                              className="dis-block f1-s-13 cl0 bg-twitter borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
+                            >
+                              <i className="fab fa-twitter m-r-7" />
+                              Twitter
+                            </a>
+
                             <a
                               href="#"
                               className="dis-block f1-s-13 cl0 bg-pinterest borad-3 p-tb-4 p-rl-18 hov-btn1 m-r-3 m-b-3 trans-03"
                             >
                               <i className="fab fa-pinterest-p m-r-7" />
                               Pinterest
-                            </a>
+                            </a> */}
                           </div>
                         </div>
                       </div>
@@ -261,15 +268,15 @@ class NewsDetail extends Component {
                       {/* Popular Posts */}
                       {/* <MostPopularNews /> */}
                       {/* Category */}
-                      <div className="p-b-60">
+                      {/* <div className="p-b-60">
                         <div className="how2 how2-cl4 flex-s-c">
                           <h3 className="f1-m-2 cl3 tab01-title">{"Bài viết liên quan"}</h3>
                         </div>
                         <ul className="p-t-35">                        
                         </ul>
-                      </div>
+                      </div> */}
                       {/* Archive */}
-                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

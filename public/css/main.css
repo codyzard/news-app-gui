@@ -1981,5 +1981,5 @@ figcaption{
 }
 
 .author-create figure img{
-  width: 1% !important;
+  /* width: 100% !important; */
 }
