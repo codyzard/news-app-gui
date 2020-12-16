@@ -4,6 +4,7 @@ export const getAllCategoriesRequest = () => {
     return (dispatch) => {
         return callApi('api/categories/get_all_categories', 'GET').then(res => {
             if (res.data) return dispatch(getAllCategories(res.data.cate_news));
+            // console.log(res);
         })
     }
 }
