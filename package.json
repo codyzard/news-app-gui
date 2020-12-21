@@ -1,4 +1,14 @@
 {
+  "scripts": {
+    "xdn": "xdn",
+    "xdn:start": "xdn run",
+    "xdn:build": "xdn build",
+    "xdn:deploy": "xdn deploy",
+    "start": "PORT=4000 react-scripts start",
+    "build": "react-scripts build && cp build/index.html build/200.html",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "name": "news-app",
   "version": "0.1.0",
   "private": true,
@@ -24,12 +34,6 @@
     "redux-thunk": "^2.3.0",
     "web-vitals": "^0.2.4"
   },
-  "scripts": {
-    "start": "PORT=4000 react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -47,5 +51,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@xdn/cli": "^2.33.2",
+    "@xdn/core": "^2.33.2",
+    "@xdn/devtools": "^2.33.2",
+    "@xdn/prefetch": "^2.33.2"
   }
 }

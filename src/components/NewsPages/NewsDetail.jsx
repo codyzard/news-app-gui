@@ -73,7 +73,6 @@ class NewsDetail extends Component {
       news_src,
       html_content,
     } = news_detail;
-    console.log(news_detail);
     if (categories) {
       categories.sort(function (a, b) {
         return a.parent_cate - b.parent_cate;
@@ -209,7 +208,7 @@ class NewsDetail extends Component {
                               <i className="fab fa-facebook-f m-r-7" />
                               <FacebookProvider appId={APP_FACEBOOK_ID}>
                                 <Share
-                                  href={`http://127.0.0.1:4000/${window.location.pathname}`}
+                                  href={window.location.href}
                                 >
                                   {({ handleClick, loading }) => (
                                     <button
